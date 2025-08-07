@@ -10,14 +10,33 @@ from dotenv import dotenv_values, load_dotenv
 from langfuse.decorators import observe
 from langfuse.openai import OpenAI
 
-env = dotenv_values(".env")
-load_dotenv()
+# Ładuj zmienne środowiskowe - najpierw spróbuj z pliku .env, potem z systemowych
+try:
+    env = dotenv_values(".env")
+    load_dotenv()
+except:
+    env = {}
 
-os.environ["AWS_ACCESS_KEY_ID"] = env["AWS_ACCESS_KEY_ID"]
-os.environ["AWS_SECRET_ACCESS_KEY"] = env["AWS_SECRET_ACCESS_KEY"]
-os.environ["OPENAI_API_KEY"] = env["OPENAI_API_KEY"]
-os.environ["LANGFUSE_PUBLIC_KEY"] = env["LANGFUSE_PUBLIC_KEY"]
-os.environ["LANGFUSE_SECRET_KEY"] = env["LANGFUSE_SECRET_KEY"]
+# Ustaw zmienne środowiskowe - preferuj systemowe zmienne środowiskowe
+os.environ["AWS_ACCESS_KEY_ID"] = os.getenv("AWS_ACCESS_KEY_ID") or env.get("AWS_ACCESS_KEY_ID", "")
+os.environ["AWS_SECRET_ACCESS_KEY"] = os.getenv("AWS_SECRET_ACCESS_KEY") or env.get("AWS_SECRET_ACCESS_KEY", "")
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY") or env.get("OPENAI_API_KEY", "")
+os.environ["LANGFUSE_PUBLIC_KEY"] = os.getenv("LANGFUSE_PUBLIC_KEY") or env.get("LANGFUSE_PUBLIC_KEY", "")
+os.environ["LANGFUSE_SECRET_KEY"] = os.getenv("LANGFUSE_SECRET_KEY") or env.get("LANGFUSE_SECRET_KEY", "")
+
+# Sprawdź czy wszystkie wymagane zmienne środowiskowe są ustawione
+required_env_vars = [
+    "AWS_ACCESS_KEY_ID",
+    "AWS_SECRET_ACCESS_KEY", 
+    "OPENAI_API_KEY",
+    "LANGFUSE_PUBLIC_KEY",
+    "LANGFUSE_SECRET_KEY"
+]
+
+missing_vars = [var for var in required_env_vars if not os.environ.get(var)]
+if missing_vars:
+    st.error(f"Brakujące zmienne środowiskowe: {', '.join(missing_vars)}")
+    st.stop()
 
 openai_client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
