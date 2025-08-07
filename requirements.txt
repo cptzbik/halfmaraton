@@ -1,0 +1,7 @@
+streamlit
+pandas
+pycaret>=3.3.2
+boto3
+python-dotenv
+langfuse<3.0.0
+openai
