@@ -19,7 +19,7 @@ os.environ["OPENAI_API_KEY"] = env["OPENAI_API_KEY"]
 os.environ["LANGFUSE_PUBLIC_KEY"] = env["LANGFUSE_PUBLIC_KEY"]
 os.environ["LANGFUSE_SECRET_KEY"] = env["LANGFUSE_SECRET_KEY"]
 
-openai_client = OpenAI(api_key=env["OPENAI_API_KEY"])
+openai_client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
 # Konfiguracja klienta S3 (Digital Ocean Spaces)
 session = boto3.session.Session()
@@ -27,8 +27,8 @@ s3 = session.client(
     service_name='s3',
     region_name='fra1', 
     endpoint_url='https://maratonapp.fra1.digitaloceanspaces.com',
-    aws_access_key_id=env["AWS_ACCESS_KEY_ID"],
-    aws_secret_access_key=env["AWS_SECRET_ACCESS_KEY"]
+    aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
+    aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"]
 )
 
 # Pobierz model z Spaces do pliku tymczasowego
