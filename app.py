@@ -13,6 +13,12 @@ from langfuse.openai import OpenAI
 env = dotenv_values(".env")
 load_dotenv()
 
+os.environ["AWS_ACCESS_KEY_ID"] = env["AWS_ACCESS_KEY_ID"]
+os.environ["AWS_SECRET_ACCESS_KEY"] = env["AWS_SECRET_ACCESS_KEY"]
+os.environ["OPENAI_API_KEY"] = env["OPENAI_API_KEY"]
+os.environ["LANGFUSE_PUBLIC_KEY"] = env["LANGFUSE_PUBLIC_KEY"]
+os.environ["LANGFUSE_SECRET_KEY"] = env["LANGFUSE_SECRET_KEY"]
+
 openai_client = OpenAI(api_key=env["OPENAI_API_KEY"])
 
 # Konfiguracja klienta S3 (Digital Ocean Spaces)
